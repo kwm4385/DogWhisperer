@@ -17,16 +17,23 @@ public class DogWhispererEntityListener extends EntityListener {
     @Override
     public void onEntityTame(EntityTameEvent event) {
         Player p = (Player)event.getOwner();
-        if(!Util.getPlayerWolves().containsKey(p)) {
-            Util.getPlayerWolves().put(p, 0);
-        }
-        if((Util.getPlayerWolves().get(p) + 1) > Config.getMaxWolves()) {
+        if(!p.hasPermission(DogWhisperer.TAME_PERMISSION)) {
             event.setCancelled(true);
-            p.sendMessage(ChatColor.GRAY + Config.getTameFailMessage());
+            p.sendMessage(ChatColor.RED + "You don't have permission to tame!");
+            return;
         }
-        else {
-            Util.getPlayerWolves().put(p, Util.getPlayerWolves().get(p) + 1);
-        }  
+        if(!p.hasPermission(DogWhisperer.NOLIMIT_PERMISSION)) {
+            if(!Util.getPlayerWolves().containsKey(p)) {
+            Util.getPlayerWolves().put(p, 0);
+            }
+            if((Util.getPlayerWolves().get(p) + 1) > Config.getMaxWolves()) {
+                event.setCancelled(true);
+                p.sendMessage(ChatColor.GRAY + Config.getTameFailMessage());
+            }
+            else {
+                Util.getPlayerWolves().put(p, Util.getPlayerWolves().get(p) + 1);
+            }
+        }
     }
     
     @Override
