@@ -19,7 +19,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class DogWhisperer extends JavaPlugin {
     
     public static final String PLUGIN_NAME = "DogWhisperer";
-    public static final String PLUGIN_VERSION = "1.1";
+    public static final String PLUGIN_VERSION = "1.2";
 
     public static final String TAME_PERMISSION = "dog.tame";
     public static final String NOLIMIT_PERMISSION = "dog.nolimit";
