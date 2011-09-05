@@ -1,8 +1,8 @@
 
 package com.escapeNT.dogWhisperer;
 
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
-import org.bukkit.event.player.PlayerLoginEvent;
 
 /**
  *
@@ -11,9 +11,7 @@ import org.bukkit.event.player.PlayerLoginEvent;
 public class DogWhispererPlayerListener extends PlayerListener {
     
     @Override
-    public void onPlayerLogin(PlayerLoginEvent event) {
-        if(!Util.getPlayerWolves().containsKey(event.getPlayer())) {
-            Util.getPlayerWolves().put(event.getPlayer(), 0);
-        }
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        Util.getPlugin().countPlayerWolves(event.getPlayer());
     }
 }

@@ -16,6 +16,7 @@ public class DogWhispererEntityListener extends EntityListener {
     
     @Override
     public void onEntityTame(EntityTameEvent event) {
+        if(event.isCancelled()) return;
         Player p = (Player)event.getOwner();
         if(!p.hasPermission(DogWhisperer.TAME_PERMISSION)) {
             event.setCancelled(true);
