@@ -30,24 +30,13 @@ public class DogWhisperer extends JavaPlugin {
         Config.load();
         
         for(Player p : getServer().getOnlinePlayers()) {
-            Util.getPlayerWolves().put(p, 0);
-        }
-        
-        for(World w : getServer().getWorlds()) {
-            for(LivingEntity e : w.getLivingEntities()) {
-                if(e instanceof Wolf && ((Wolf)e).isTamed()) {
-                    Player p = (Player)((Wolf)e).getOwner();
-                    if(!Util.getPlayerWolves().containsKey(p)) {
-                        Util.getPlayerWolves().put(p, 0);
-                    }
-                    Util.getPlayerWolves().put(p, Util.getPlayerWolves().get(p) + 1);
-                }
-            }
+            countPlayerWolves(p);
         }
         
         PluginManager pm = this.getServer().getPluginManager();
-        pm.registerEvent(Type.ENTITY_TAME, new DogWhispererEntityListener(), Priority.Normal, this);
+        pm.registerEvent(Type.ENTITY_TAME, new DogWhispererEntityListener(), Priority.Monitor, this);
         pm.registerEvent(Type.ENTITY_DEATH, new DogWhispererEntityListener(), Priority.Normal, this);
+        pm.registerEvent(Type.PLAYER_JOIN, new DogWhispererPlayerListener(), Priority.Normal, this);
 
         pm.addPermission(new Permission(TAME_PERMISSION, PermissionDefault.TRUE));
         pm.addPermission(new Permission(NOLIMIT_PERMISSION, PermissionDefault.OP));
@@ -58,5 +47,16 @@ public class DogWhisperer extends JavaPlugin {
     @Override
     public void onDisable() {
         Util.log("version " + PLUGIN_VERSION + " disabled.");
+    }
+    
+    protected void countPlayerWolves(Player p) {
+        Util.getPlayerWolves().put(p, 0);
+        for(World w : p.getServer().getWorlds()) {
+            for(LivingEntity e : w.getLivingEntities()) {
+                if(e instanceof Wolf && ((Wolf)e).isTamed() && p.equals((Player)((Wolf)e).getOwner())) {
+                    Util.getPlayerWolves().put(p, Util.getPlayerWolves().get(p) + 1);
+                }
+            }
+        }
     }
 }
